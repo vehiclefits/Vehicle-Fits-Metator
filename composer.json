@@ -1,0 +1,16 @@
+{
+    "name": "vehiclefits/vehicle-fits-metator",
+    "description": "Vehiclefits Metator Module.",
+    "license": "OSL-3.0",
+    "minimum-stability":"dev",
+    "require": {
+        "vehiclefits/vehicle-fits-core":"0.2.*",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.19",
+        "phpunit/php-invoker": "*",
+        "phpunit/phpunit-selenium": "*",
+        "phpunit/phpunit-story": "*",
+        "phpunit/dbunit": "*",
+    }
+}
