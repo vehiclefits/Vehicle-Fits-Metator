@@ -26,6 +26,9 @@ class Module implements
 
     public function onBootstrap(MvcEvent $e)
     {
+        if(!isset($_SESSION)) {
+            session_start();
+        }
         define( 'ELITE_CONFIG_DEFAULT', dirname(__FILE__).'/config.default.ini' );
         define( 'ELITE_CONFIG', dirname(__FILE__).'/config.ini' );
         define( 'ELITE_PATH', '' );

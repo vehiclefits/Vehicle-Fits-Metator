@@ -27,7 +27,6 @@ class DataMapper extends \Metator\Product\DataMapper
     /** @return \VF_FlexibleSearch */
     function flexibleSearch()
     {
-        session_start();
         $search = new \VF_FlexibleSearch(new \VF_Schema, new \Zend_Controller_Request_Http);;
         return $search;
     }
