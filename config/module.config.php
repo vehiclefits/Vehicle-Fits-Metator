@@ -8,5 +8,36 @@
  */
 
 return array(
+    'router' => array(
+        'routes' => array(
 
+            'vf_js' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/vf/js',
+                    'defaults' => array(
+                        'controller' => 'VehicleFitsMetator\Controller\Js',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+
+            'vf_process' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/vf/process',
+                    'defaults' => array(
+                        'controller' => 'VehicleFitsMetator\Controller\Js',
+                        'action'     => 'process',
+                    ),
+                ),
+            ),
+        ),
+    ),
+
+    'controllers' => array(
+        'invokables' => array(
+            'VehicleFitsMetator\Controller\Js' => 'VehicleFitsMetator\Controller\JsController',
+        ),
+    ),
 );
