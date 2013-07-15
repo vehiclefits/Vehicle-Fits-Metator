@@ -60,7 +60,10 @@ class Module implements
     {
         return array(
             'factories' => array(
-
+                'Product\DataMapper' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    return new DataMapper($dbAdapter);
+                }
             ),
         );
     }
