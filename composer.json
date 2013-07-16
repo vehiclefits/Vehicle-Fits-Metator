@@ -4,6 +4,7 @@
     "license": "OSL-3.0",
     "minimum-stability":"dev",
     "require": {
+        "joshribakoff/zf1-empty":"*",
         "vehiclefits/vehicle-fits-core":"0.2.*"
     },
     "require-dev": {
