@@ -106,10 +106,11 @@ class Module implements
 
     function createDB()
     {
+        $this->requireConfig();
         $dbAdapter = new \Zend_Db_Adapter_Pdo_Mysql(array(
-            'dbname' => 'magento',
-            'username' => 'root',
-            'password' => ''
+            'dbname' => getenv('PHP_VAF_DB_NAME'),
+            'username' => getenv('PHP_VAF_DB_USERNAME'),
+            'password' => getenv('PHP_VAF_DB_PASSWORD')
         ));
         $dbAdapter->getConnection()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
@@ -121,5 +122,15 @@ class Module implements
         $dbAdapter->getConnection()->query('SET character_set_server = utf8;');
 
         return $dbAdapter;
+    }
+
+    /* Figure out where we are reading the database configuration from */
+    function requireConfig()
+    {
+        if(file_exists('config.php')) {
+            require_once(__DIR__.'/vfconfig.php');
+        } else {
+            require_once(__DIR__.'/vfconfig.default.php');
+        }
     }
 }
