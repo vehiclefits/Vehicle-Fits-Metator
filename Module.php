@@ -33,7 +33,13 @@ class Module implements
         define( 'ELITE_CONFIG', dirname(__FILE__).'/config.ini' );
         define( 'ELITE_PATH', '' );
 
-        \VF_Singleton::getInstance()->setReadAdapter($this->createDB());
+        /** @var $zf2DB  \Zend\Db\Adapter\Adapter */
+        $zf2DB =  $e->getApplication()->getServiceManager()->get('Zend\Db\Adapter\Adapter');
+        $pdo = $zf2DB->getDriver()->getConnection()->getResource();
+
+        $zf1DB = $this->createDB($pdo);
+
+        \VF_Singleton::getInstance()->setReadAdapter($zf1DB);
         \VF_Singleton::getInstance()->setRequest(new \Zend_Controller_Request_Http());
         \VF_Singleton::getInstance()->setProcessURL('/vf/process?');
 
@@ -104,14 +110,15 @@ class Module implements
         );
     }
 
-    function createDB()
+    function createDB($pdo)
     {
         $this->requireConfig();
-        $dbAdapter = new \Zend_Db_Adapter_Pdo_Mysql(array(
-            'dbname' => getenv('PHP_VAF_DB_NAME'),
-            'username' => getenv('PHP_VAF_DB_USERNAME'),
-            'password' => getenv('PHP_VAF_DB_PASSWORD')
-        ));
+
+        // ZF1 throws an exception if params aren't passed to constructor, but we never let it create a PDO
+        // anyways because we inject our own PDO.
+        $dbAdapter = new custom(array('dbname'=>'ignored', 'username'=>'ignored', 'password'=>'ignored'));
+        $dbAdapter->setPDO($pdo);
+
         $dbAdapter->getConnection()->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
         $dbAdapter->getConnection()->query('SET character set utf8;');
@@ -132,5 +139,14 @@ class Module implements
         } else {
             require_once(__DIR__.'/vfconfig.default.php');
         }
+    }
+}
+
+class custom extends \Zend_Db_Adapter_Pdo_Mysql
+{
+
+    function setPDO($pdo)
+    {
+        $this->_connection = $pdo;
     }
 }
